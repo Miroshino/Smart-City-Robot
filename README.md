@@ -11,12 +11,8 @@
 <!-- Project's Part 01 Header -->
 # 👋 **Smart City Robot**
 <div align="center">
-    <img src="https://i.ibb.co/jrqz45Y/NodeJS.png" alt="NodeJS Logo" width="80" height="80"> 
-    <img src="https://i.ibb.co/m4QwyCM/Sequelize.png" alt="Sequelize Logo" 
-    width="80" height="80"/> 
-    <img src="https://i.ibb.co/rdNn0Lw/JWT.png" alt="JWT Logo" width="80" height="80"/> 
-    <img src="https://i.ibb.co/cvHw3dy/NPM.png" alt="JWT Logo" width="165" height="80"/> 
-    <img src="https://dashboard.snapcraft.io/site_media/appmedia/2019/12/ezgif.com-gif-maker.png" alt="Space Logo" width="80" height="80">
+    <img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1869px-Python-logo-notext.svg.png"  width="150">
+    <img src="https://cdn.discordapp.com/attachments/1016726123134058526/1069603350892523560/image.png" width="90" height="170">
 </div>
 
 <br>
