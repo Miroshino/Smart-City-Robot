@@ -1,6 +1,7 @@
 # Imports
 import tkinter as tk
 
+
 # Frame class
 class Frame:
     # Construct (init)
@@ -22,3 +23,4 @@ class Frame:
         # Show the frame
         Game_Board.pack(padx=10, pady=25)
         Game_Frame.mainloop()
+
