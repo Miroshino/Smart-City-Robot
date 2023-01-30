@@ -53,7 +53,7 @@ Running python -m tkinter from the command line should open a window demonstrati
 letting you know that tkinter is properly installed on your system, and also showing what version of Tcl/Tk is installed, 
 so you can read the Tcl/Tk documentation specific to that version.
 
-<img src="file:///C:/Users/mlgaw/AppData/Local/Packages/Microsoft.ScreenSketch_8wekyb3d8bbwe/TempState/Capture%20d’écran%202023-01-30%20143529.png">
+<img src="https://i.imgur.com/AgBLeeC.png">
 
 <!-- Markdown Badges Variables -->
 [contributors-badge]: https://img.shields.io/github/contributors/Miroshino/Smart-City-Robot.svg?style=for-the-badge
