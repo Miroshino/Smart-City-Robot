@@ -1,7 +1,5 @@
 # Imports
 import tkinter as tk
-import random
-
 
 # Square class
 class Square:
@@ -12,7 +10,7 @@ class Square:
 
 # Map Class
 class Map:
-    def __init__(self, parent, n=10, size=50):
+    def __init__(self, parent, n=11 , size=80):
         self.parent = parent
         self.n = n
         self.size = size
@@ -28,8 +26,8 @@ class Map:
             self.grid.append(row)
 
         # Position the dots
-        self.points.append((random.randint(0, n - 1), random.randint(0, n - 1)))
-        self.points.append((random.randint(0, n - 1), random.randint(0, n - 1)))
+        self.points.append((10, 0))
+        self.points.append((0, 10))
 
         # Creating the two dots
         for i, (x, y) in enumerate(self.points):
