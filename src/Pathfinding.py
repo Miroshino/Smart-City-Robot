@@ -34,10 +34,11 @@ canvas.grid(row=0, column=1, padx=10, pady=5)
 class Spot:
     
     start_point = None
+    borne_point = None
     end_point = None
     
     __slots__ = ['button','row', 'col', 'width', 'neighbors', 'g', 'h', 'f',  
-                 'parent', 'start', 'end', 'barrier', 'clicked', 'total_rows']
+                 'parent', 'start', 'end', 'barrier', 'clicked', 'total_rows', 'battery']
     
     def __init__(self, row, col, width, offset, total_rows):
         
@@ -63,6 +64,7 @@ class Spot:
         self.barrier = False
         self.clicked = False
         self.total_rows = total_rows
+        self.battery = 0;
     
     def make_start(self):
         self.button.config(bg = "blue")
@@ -76,11 +78,11 @@ class Spot:
         self.clicked = True
         Spot.end_point = (self.col, self.row)
         
-    #def make_borne(self):
-    #    self.button.config(bg = "green")
-    #    self.end = True
-    #    self.clicked = True
-    #    Spot.end_point = (self.col, self.row)
+    def make_borne(self):
+        self.button.config(bg = "green")
+        self.end = True
+        self.clicked = True
+        Spot.borne_point = (self.col, self.row)
         
     def make_barrier(self):
         self.button.config(bg = "black")
@@ -116,6 +118,8 @@ class Spot:
         if self.clicked == False:
             if not Spot.start_point:   
                 self.make_start()
+            elif not Spot.borne_point:
+                self.make_borne()
             elif not Spot.end_point:
                 self.make_end()
             else :
@@ -125,6 +129,9 @@ class Spot:
             if self.start == True:   
                 self.start = False
                 Spot.start_point = None
+            elif self.borne == True:
+                self.borne = False
+                Spot.borne_point = None
             elif self.end == True:
                 self.end = False
                 Spot.end_point = None
@@ -179,6 +186,7 @@ def Reset():
     global grid
         
     Spot.start_point = None
+    Spot.borne_point = None
     Spot.end_point = None
     
     for row in grid:
@@ -193,6 +201,7 @@ def Reset():
             spot.end = False
             spot.barrier = False
             spot.enable()
+            spot.battery = 50;
             
 def break_wall(current, new):
     if current.row == new.row:
@@ -217,8 +226,8 @@ def break_wall(current, new):
 def a_star(grid, tickTime):
 
     count = 0
-    battery = 10
     start = grid[Spot.start_point[1]][Spot.start_point[0]]
+    #borne = grid[Spot.borne_point[1]][Spot.borne_point[0]]
     end = grid[Spot.end_point[1]][Spot.end_point[0]]
     
     # create open_set
@@ -232,6 +241,9 @@ def a_star(grid, tickTime):
     
     # calculate f_score for start using heuristic function
     start.f = h(start, end)
+    
+    #start with a battery level
+    start.battery = 50
     
     # create a dict to keep track of spots in open_set, can't check PriorityQueue
     open_set_hash = {start}
@@ -277,16 +289,12 @@ def a_star(grid, tickTime):
                     
                     # count the step
                     count += 1
-                    battery -= 1
                     
                     # add neighbor in open_set for consideration
                     open_set.put((neighbor.f, count, neighbor))
                     open_set_hash.add(neighbor)
                     neighbor.make_open()
                     
-                #if battery <= 0:
-                #    messagebox.showinfo("No battery")
-                    
         
         # draw updated grid with new open_set        
         root.update_idletasks()
@@ -294,53 +302,13 @@ def a_star(grid, tickTime):
         
         if current != start:
             current.make_closed()
+            
+        #if battery <= 0:
+            #messagebox.showinfo("No battery")
+            #return False
             
     # didn't find path
     messagebox.showinfo("No Solution", "There was no solution" )
-
-    return False
-
-# Breadth-First algorithm
-def breadth_first(grid, tickTime):
-    
-    start = grid[Spot.start_point[1]][Spot.start_point[0]]
-    end = grid[Spot.end_point[1]][Spot.end_point[0]]
-    
-    open_set = deque()
-    
-    open_set.append(start)
-    visited_hash = {start}
-    
-    while len(open_set) > 0:
-        current = open_set.popleft()
-        
-        # found end?
-        if current == end:
-            reconstruct_path(end, tickTime)
-            
-            # draw end and start again
-            end.make_end()
-            start.make_start()
-            return
-        
-        # if not end - consider all neighbors of current spot to choose next step
-        for neighbor in current.neighbors:
-            
-            if neighbor not in visited_hash:
-                neighbor.parent = current
-                visited_hash.add(neighbor)
-                open_set.append(neighbor)
-                neighbor.make_open()
-                
-        # draw updated grid with new open_set        
-        root.update_idletasks()
-        time.sleep(tickTime)
-        
-        if current != start:
-            current.make_closed()
-            
-    # didn't find path
-    messagebox.showinfo("No Solution", "There was no solution")
 
     return False
 
@@ -364,6 +332,7 @@ def StartAlgorithm():
             if spot.clicked == False:
                 spot.reset()
             spot.disable() # disable buttons in the grid for running algorithm
+            
     
     # disable UI frame for running algorithm
     for child in UI_frame.winfo_children():
@@ -371,9 +340,7 @@ def StartAlgorithm():
     
     # choose algorithm
     if algMenu.get() == 'A-star Algorithm':
-        a_star(grid, speedScale.get())
-    elif algMenu.get() == 'Breadth-First Algorithm':
-        breadth_first(grid, speedScale.get())     
+        a_star(grid, speedScale.get())  
         
     # enable buttons in the grid
     for row in grid:
@@ -397,7 +364,13 @@ def random_walls(grid):
         if current.start == False:
             current.make_end()
             
+    if not Spot.borne_point:
+        current = grid[random.randint(0, ROWS - 1)][random.randint(0, ROWS - 1)]
+        if current.start == False | current.end == False:
+            current.make_borne()
+            
     start = grid[Spot.start_point[1]][Spot.start_point[0]]
+    borne = grid[Spot.borne_point[1]][Spot.borne_point[0]]
     end = grid[Spot.end_point[1]][Spot.end_point[0]]
     
     # put walls randomly
@@ -512,6 +485,7 @@ def carve_out(grid, rows, tickTime):
     to_visit[-1].make_end()
     start = grid[Spot.start_point[1]][Spot.start_point[0]]
     end = grid[Spot.end_point[1]][Spot.end_point[0]]
+    borne = grid[Spot.borne_point[1]][Spot.borne_point[0]]
     
     # draw updated grid with new open_set        
     root.update_idletasks()
@@ -634,7 +608,7 @@ Button(UI_frame, text='Build maze', command=build_maze, font = ("Helvetica", 14)
        bg='pale green').grid(row=2, column=0, padx=5, pady=(10, 20))
 
 algMenu = ttk.Combobox(UI_frame, textvariable=selected_alg, 
-                       values=['A-star Algorithm', 'Breadth-First Algorithm'], font = font)
+                       values=['A-star Algorithm'], font = font)
 algMenu.grid(row=3, column=0, padx=5, pady=(20, 5), sticky=W)
 algMenu.current(0)
 speedScale = Scale(UI_frame, from_=0.05, to=0.5, digits=2, resolution=0.05, 
