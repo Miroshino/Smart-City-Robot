@@ -13,6 +13,6 @@ main_frame.show()
 # Map_Editor Frame
 
 # Game_Frame
-game_frame: GameFrame = GameFrame("Smart City Rumble", "670x587")
+game_frame: GameFrame = GameFrame("Smart City Rumble", "671x587")
 game_frame.show()
 '''

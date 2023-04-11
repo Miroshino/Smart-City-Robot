@@ -1,14 +1,18 @@
 # Import(s)
-import tkinter as tk
-import gui.GameFrame as GameFrame
 
 
 # Map Class
 class Map:
     # Constructor method
-    def __init__(self, tiles_list: list):
-        self.tiles_list = tiles_list
+    def __init__(self):
         self.map_table = []
+        self.tiles_list = []
+
+    # Setters
+    # Method: set_tiles_list
+    # Purpose: Set the tiles list
+    def set_tiles_list(self, tiles_list: list):
+        self.tiles_list = tiles_list
 
     # Method: get_number_color
     # Purpose: Return the color of the number based on the number available in the map file

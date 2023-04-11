@@ -12,7 +12,8 @@ class Tiles:
         self.rows = 20
         self.buttons = []
 
-        self.map = Map.Map(self.get_buttons())
+        self.map = Map.Map()
+        self.map.set_tiles_list(self.get_buttons())
         self.window = game_frame.window
 
         # Create bottom & upper game_frame variables
@@ -48,7 +49,7 @@ class Tiles:
                 self.buttons.append(button)
 
         # Get the map table
-        self.map.convert_to_table('data/map_1.txt')
+        self.map.convert_to_table('data/1.mapdata')
         map_table = self.map.get_map_table()
 
         # Change the color of the buttons according to the map table numbers
@@ -58,6 +59,13 @@ class Tiles:
                 if row == 0 or row == self.rows - 1 or column == 0 or column == self.columns - 1:
                     self.buttons[row * self.columns + column].configure(bg="black")
 
+                self.buttons[row * self.columns + column].configure(bg=self.map.get_number_color(map_table[row][column]))
+
+    # Method: change_tiles_color
+    # Purpose: Change the color of the tiles by using the map table
+    def change_tiles_color(self, map_table : list):
+        for row in range(self.get_rows()):
+            for column in range(self.columns):
                 self.buttons[row * self.columns + column].configure(bg=self.map.get_number_color(map_table[row][column]))
 
     # Method: reset_tiles

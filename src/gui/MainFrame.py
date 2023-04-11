@@ -51,7 +51,7 @@ class MainFrame:
         self.window.destroy()
 
         # Show the MapEditorFrame
-        map_editor_frame = MapEditorFrame.MapEditorFrame("Smart City Rumble - Éditeur de carte", "670x587")
+        map_editor_frame = MapEditorFrame.MapEditorFrame("Smart City Rumble - Éditeur de carte", "672x587")
         map_editor_frame.show()
 
     # Method: show

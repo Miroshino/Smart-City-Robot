@@ -1,7 +1,10 @@
 # Import(s)
 import tkinter as tk
-import map.Tiles as Tiles
+import tkinter.filedialog as filedialog
+from tkinter import messagebox
 
+import map.Tiles as Tiles
+import map.Map as Map
 
 # MapEditorFrame Class
 class MapEditorFrame:
@@ -19,11 +22,11 @@ class MapEditorFrame:
 
         # Center the window
         self.window.update_idletasks()
-        width = self.window.winfo_width() # Get the window's width and height
-        height = self.window.winfo_height() # Get the window's width and height
-        x = (self.window.winfo_screenwidth() // 2) - (width // 2) - 50 # Center the window on the screen
-        y = (self.window.winfo_screenheight() // 2) - (height // 2) - 50 # Center the window on the screen
-        self.window.geometry('{}x{}+{}+{}'.format(width, height, x, y)) # Set the window's position
+        width = self.window.winfo_width()  # Get the window's width and height
+        height = self.window.winfo_height()  # Get the window's width and height
+        x = (self.window.winfo_screenwidth() // 2) - (width // 2) - 50  # Center the window on the screen
+        y = (self.window.winfo_screenheight() // 2) - (height // 2) - 50  # Center the window on the screen
+        self.window.geometry('{}x{}+{}+{}'.format(width, height, x, y))  # Set the window's position
 
         # Create bottom & upper frame variables
         self.bottom_frame = tk.Frame(self.window, bg="black")
@@ -55,9 +58,9 @@ class MapEditorFrame:
 
         # Define a list of tuples with button information
         buttons = [
-            ("Ouvrir", self.start_button_handler),
-            ("Changer de couleur", self.stop_button_handler),
-            ("Sauvegarder", self.restart_button_handler),
+            ("Ouvrir", self.open_file_handler),
+            ("Changer de couleur", self.change_color_handler),
+            ("Sauvegarder", self.save_file_handler),
             ("Quitter", self.window.destroy),
         ]
 
@@ -75,20 +78,43 @@ class MapEditorFrame:
         # Generate tiles
         self.tiles.generate_tiles()
 
-    # Method: start_button_handler
-    # Purpose: Start the generation of the map and the simulation
-    def start_button_handler(self):
+    # Method: open_file_handler
+    # Purpose: Open a file and display and get map data
+    def open_file_handler(self):
+        # Open a file dialog box and allow the user to select a file
+        file = filedialog.askopenfilename(initialdir="data/", title="Select a file", filetypes=(("Map data files", "*.mapdata"), ("All files", "*.*")))
+
+        # If the user selected a file
+        if file:
+            with open(file, 'r') as file:
+                # Check if the file is empty
+                if file.read() == "":
+                    messagebox.showerror("Fichier vide", "Le fichier selectionné est vide.")
+
+                # Check if the file extension is valid (if it's a .mapdata file)
+                if file.name.endswith(".mapdata"):
+                    # Variable(s)
+                    file_path = file.name  # Get the file path
+
+                    # Create a map object
+                    map = Map.Map()
+                    map.convert_to_table(file_path)
+                    map_table = map.get_map_table()
+
+                    # Change the color of the tiles
+                    self.tiles.change_tiles_color(map_table)
+                else:
+                    messagebox.showerror("Format de fichier invalide", "Le fichier selectionné n'est pas une extension .mapdata.")
+
+    # Method: change_color_handler
+    # Purpose: Change the color of the tiles
+    def change_color_handler(self):
         pass
 
-    # Method: stop_button_handler
-    # Purpose: Stop the generation of the map and the simulation
-    def stop_button_handler(self):
+    # Method: save_file_handler
+    # Purpose: Save the file
+    def save_file_handler(self):
         pass
-
-    # Method: restart_button_handler
-    # Purpose: Change all buttons to white except the border limit
-    def restart_button_handler(self):
-        self.tiles.reset_tiles()
 
     # Method: show
     # Purpose: Show the window
