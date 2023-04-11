@@ -38,7 +38,7 @@ class Spot:
     end_point = None
     
     __slots__ = ['button','row', 'col', 'width', 'neighbors', 'g', 'h', 'f',  
-                 'parent', 'start', 'end', 'barrier', 'clicked', 'total_rows', 'battery']
+                 'parent', 'start', 'end', 'barrier', 'clicked', 'borne', 'total_rows', 'battery']
     
     def __init__(self, row, col, width, offset, total_rows):
         
@@ -63,6 +63,7 @@ class Spot:
         self.end = False
         self.barrier = False
         self.clicked = False
+        self.borne = False
         self.total_rows = total_rows
         self.battery = 0;
     
