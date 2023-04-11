@@ -52,6 +52,8 @@ class MapEditorFrame:
 
         # Create tile object
         self.tiles = Tiles.Tiles(self)
+        self.tiles.set_current_color(1)
+        self.tiles.set_current_frame("map_editor")
 
     # Method: get_tiles
     # Purpose: Return the tiles object

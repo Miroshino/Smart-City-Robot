@@ -10,6 +10,7 @@ class Tiles:
     # Constructor method
     def __init__(self, game_frame: GameFrame):
         # Variable(s)
+        self.current_frame = None
         self.columns = 28
         self.rows = 20
         self.buttons = []
@@ -117,6 +118,10 @@ class Tiles:
     # Method: button_handler
     # Purpose: Handle the button click event
     def button_handler(self, button_id):
+        # If the current frame is the game then pass
+        if self.current_frame == "game":
+            return
+
         # id is a tuple (row, column) containing the position of the clicked button
         row, column = button_id
 
@@ -132,3 +137,6 @@ class Tiles:
                 self.buttons[index].configure(bg="white")
             else:
                 self.buttons[index].configure(bg=self.current_color)
+
+    def set_current_frame(self, frame: str):
+        self.current_frame = frame

@@ -1,6 +1,9 @@
 # Import(s)
 import tkinter as tk
+from tkinter import messagebox, filedialog
+
 import map.Tiles as Tiles
+from map import Map
 
 
 # GameFrame Class
@@ -31,6 +34,8 @@ class GameFrame:
 
         # Create tile object
         self.tiles = Tiles.Tiles(self)
+        self.tiles.set_current_color(1)
+        self.tiles.set_current_frame("game")
 
     # Method: get_tiles
     # Purpose: Return the tiles object
@@ -58,12 +63,14 @@ class GameFrame:
             ("Démarrer", self.start_button_handler),
             ("Arrêter", self.stop_button_handler),
             ("Recommencer", self.restart_button_handler),
+            ("Ouvrir", self.open_file_handler),
+            ("Retour", self.window.destroy),
         ]
 
         # Add buttons to the frame using a for loop and automatically horizontal center them
         for text, handler in buttons:
             button = tk.Button(self.bottom_frame, text=text, bg="white", width=15, height=2, command=handler)
-            button.pack(side="left", padx=55, pady=13)
+            button.pack(side="left", padx=15, pady=13)
 
     # Method: upper_menu
     # Purpose: Create a grid of buttons at the top of the window
@@ -88,6 +95,36 @@ class GameFrame:
     # Purpose: Change all buttons to white except the border limit
     def restart_button_handler(self):
         self.tiles.reset_tiles()
+
+    # Method: open_file_handler
+    # Purpose: Open a file and load the map
+    def open_file_handler(self):
+        # Open a file dialog box and allow the user to select a file
+        file = filedialog.askopenfilename(initialdir="data/", title="Select a file",
+                                          filetypes=(("Map data files", "*.mapdata"), ("All files", "*.*")))
+
+        # If the user selected a file
+        if file:
+            with open(file, 'r') as file:
+                # Check if the file is empty
+                if file.read() == "":
+                    messagebox.showerror("Fichier vide", "Le fichier selectionné est vide.")
+
+                # Check if the file extension is valid (if it's a .mapdata file)
+                if file.name.endswith(".mapdata"):
+                    # Variable(s)
+                    file_path = file.name  # Get the file path
+
+                    # Create a map object
+                    map = Map.Map()
+                    map.convert_to_table(file_path)
+                    map_table = map.get_map_table()
+
+                    # Change the color of the tiles
+                    self.tiles.change_tiles_color(map_table)
+                else:
+                    messagebox.showerror("Format de fichier invalide",
+                                         "Le fichier selectionné n'est pas une extension .mapdata.")
 
     # Method: show
     # Purpose: Show the window

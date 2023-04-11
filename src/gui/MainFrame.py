@@ -40,9 +40,12 @@ class MainFrame:
     # Method: play_button_handler
     # Purpose: Handle the play button
     def play_button_handler(self):
-        print("Play button pressed")
         # Destroy the main menu
         self.window.destroy()
+
+        # Show the MapEditorFrame
+        game_frame = GameFrame.GameFrame("Smart City Rumble - Simulation", "672x587")
+        game_frame.show()
 
     # Method: map_editor_button_handler
     # Purpose: Handle the map editor button
