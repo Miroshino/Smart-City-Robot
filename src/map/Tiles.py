@@ -1,22 +1,22 @@
 # Import(s)
 import tkinter as tk
-import gui.Frame as Frame
+import gui.GameFrame as GameFrame
 import map.Map as Map
 
 
 # Tiles Class
 class Tiles:
     # Constructor method
-    def __init__(self, frame: Frame):
+    def __init__(self, game_frame: GameFrame):
         self.columns = 28
         self.rows = 20
         self.buttons = []
 
         self.map = Map.Map(self.get_buttons())
-        self.window = frame.window
+        self.window = game_frame.window
 
-        # Create bottom & upper frame variables
-        self.upper_frame = frame.get_upper_menu()
+        # Create bottom & upper game_frame variables
+        self.upper_frame = game_frame.get_upper_menu()
 
     # Getters
     # Method: get_buttons

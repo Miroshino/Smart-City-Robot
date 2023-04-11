@@ -1,8 +1,18 @@
 # Imports
-from gui.Frame import Frame
+from gui.MainFrame import MainFrame
+from gui.GameFrame import GameFrame
+from gui.MapEditorFrame import MapEditorFrame
 from map.Map import Map
 
-# Game_Frame
-game_frame: Frame = Frame("Smart City Rumble", "670x587")
-game_frame.show()
+# Main_Frame
+main_frame: MainFrame = MainFrame("Smart City Rumble - Menu Principal", "400x100")
+main_frame.show()
 
+
+'''
+# Map_Editor Frame
+
+# Game_Frame
+game_frame: GameFrame = GameFrame("Smart City Rumble", "670x587")
+game_frame.show()
+'''

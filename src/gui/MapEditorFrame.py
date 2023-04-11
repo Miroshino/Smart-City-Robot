@@ -3,8 +3,8 @@ import tkinter as tk
 import map.Tiles as Tiles
 
 
-# Frame Class
-class Frame:
+# MapEditorFrame Class
+class MapEditorFrame:
     # Constructor method
     def __init__(self, title: str, size: str):
         # Attributes
@@ -55,15 +55,16 @@ class Frame:
 
         # Define a list of tuples with button information
         buttons = [
-            ("Démarrer", self.start_button_handler),
-            ("Arrêter", self.stop_button_handler),
-            ("Recommencer", self.restart_button_handler),
+            ("Ouvrir", self.start_button_handler),
+            ("Changer de couleur", self.stop_button_handler),
+            ("Sauvegarder", self.restart_button_handler),
+            ("Quitter", self.window.destroy),
         ]
 
         # Add buttons to the frame using a for loop and automatically horizontal center them
         for text, handler in buttons:
             button = tk.Button(self.bottom_frame, text=text, bg="white", width=15, height=2, command=handler)
-            button.pack(side="left", padx=55, pady=13)
+            button.pack(side="left", padx=35, pady=13)
 
     # Method: upper_menu
     # Purpose: Create a grid of buttons at the top of the window

@@ -1,6 +1,6 @@
 # Import(s)
 import tkinter as tk
-import gui.Frame as Frame
+import gui.GameFrame as GameFrame
 
 
 # Map Class
