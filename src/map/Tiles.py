@@ -1,6 +1,7 @@
 # Import(s)
 import tkinter as tk
 import gui.GameFrame as GameFrame
+import gui.MapEditorFrame as MapEditorFrame
 import map.Map as Map
 
 
@@ -8,10 +9,13 @@ import map.Map as Map
 class Tiles:
     # Constructor method
     def __init__(self, game_frame: GameFrame):
+        # Variable(s)
         self.columns = 28
         self.rows = 20
         self.buttons = []
+        self.current_color = "white"
 
+        # Create map object
         self.map = Map.Map()
         self.map.set_tiles_list(self.get_buttons())
         self.window = game_frame.window
@@ -24,6 +28,11 @@ class Tiles:
     # Purpose: Return the buttons
     def get_buttons(self):
         return self.buttons
+
+    # Method: get_button
+    # Purpose: Return a specific button based on row and column
+    def get_button(self, row: int, column: int):
+        return self.buttons[row * self.columns + column]
 
     # Method: get_rows
     # Purpose: Return the number of rows
@@ -75,6 +84,17 @@ class Tiles:
             if button.cget("bg") != "black":
                 button.configure(bg="white")
 
+    # Method: get_map
+    # Purpose: Return the map object
+    def get_map(self):
+        return self.map
+
+    # Method: set_current_color
+    # Purpose: Set the current color of the tile
+    def set_current_color(self, color: int):
+        print("Couleur choisie : " + str(color) + " - " + self.map.get_number_color(color) + "")
+        self.current_color = self.map.get_number_color(color)
+
     # Method: button_handler
     # Purpose: Handle the button click event
     def button_handler(self, button_id):
@@ -84,8 +104,12 @@ class Tiles:
         # Get the index of the button in the buttons list
         index = row * self.columns + column
 
-        # Change the button color to red if not black and if red then change it to white
-        if self.buttons[index].cget("bg") == "white":
-            self.buttons[index].configure(bg="red")
-        elif self.buttons[index].cget("bg") == "red":
-            self.buttons[index].configure(bg="white")
+        # Change the button color to the current color except if the button is a border
+        # And if the button is actually colored (not white) then change it to white
+        if self.buttons[index].cget("bg") != "black":
+            if self.buttons[index].cget("bg") == "white":
+                self.buttons[index].configure(bg=self.current_color)
+            elif self.buttons[index].cget("bg") == self.current_color:
+                self.buttons[index].configure(bg="white")
+            else:
+                self.buttons[index].configure(bg=self.current_color)

@@ -14,6 +14,23 @@ class MapEditorFrame:
         self.title = title
         self.size = size
 
+        # Variable(s)
+        self.current_color = "white"
+        self.colors_table = {
+            "black": 0,  # Border
+            "white": 1,  # Empty (road)
+            "grey": 2,  # Building
+            "blue": 3,  # Water
+            "green": 4,  # Grass
+        }
+        self.colors_label_table = {
+            "black": "Bordure",  # Border
+            "white": "Route",  # Empty (road)
+            "grey": "Bâtiment",  # Building
+            "blue": "Eau",  # Water
+            "green": "Herbe",  # Grass
+        }
+
         # Create main window
         self.window = tk.Tk()
         self.window.title(self.title)
@@ -50,6 +67,11 @@ class MapEditorFrame:
     def get_bottom_menu(self):
         return self.bottom_frame
 
+    # Method: get_current_color
+    # Purpose: Return the current color
+    def get_current_color(self):
+        return self.current_color
+
     # Method: bottom_menu
     # Purpose: Create a bottom menu with 3 buttons
     def bottom_menu(self):
@@ -61,7 +83,7 @@ class MapEditorFrame:
             ("Ouvrir", self.open_file_handler),
             ("Changer de couleur", self.change_color_handler),
             ("Sauvegarder", self.save_file_handler),
-            ("Quitter", self.window.destroy),
+            ("Retour", self.window.destroy),
         ]
 
         # Add buttons to the frame using a for loop and automatically horizontal center them
@@ -107,14 +129,56 @@ class MapEditorFrame:
                     messagebox.showerror("Format de fichier invalide", "Le fichier selectionné n'est pas une extension .mapdata.")
 
     # Method: change_color_handler
-    # Purpose: Change the color of the tiles
+    # Purpose: Show a frame with a color picker based on the colors table
     def change_color_handler(self):
-        pass
+        # Create a new window
+        color_window = tk.Toplevel(self.window)
+        color_window.title("Choisir une couleur")
+        color_window.geometry("300x300")
+        color_window.resizable(False, False)
+
+        # Center the window
+        color_window.update_idletasks()
+        width = color_window.winfo_width()
+
+        # Show color list based on the colors table
+        for color in self.colors_table:
+            if color == "white":
+                button = tk.Button(color_window, text=self.colors_label_table[color], bg=color, width=41, height=3, command=lambda color=color: self.tiles.set_current_color(self.colors_table[color]))
+            else:
+                button = tk.Button(color_window, text=self.colors_label_table[color], foreground="white", bg=color, width=41, height=3, command=lambda color=color: self.tiles.set_current_color(self.colors_table[color]))
+
+            button.pack(pady=2)
+
 
     # Method: save_file_handler
-    # Purpose: Save the file
+    # Purpose: Get the current map data and save it to a file
     def save_file_handler(self):
-        pass
+        # Create map table based on the current tiles
+        map_table = []
+        map = self.tiles.get_map()
+
+        # Get the current color of each tile and add it to the map table
+        for rows in range(self.tiles.get_rows()):
+            map_row = []
+            for columns in range(self.tiles.get_columns()):
+                current_color = self.colors_table[self.tiles.get_button(rows, columns).cget("bg")]
+                map_row.append(current_color)
+
+            map_table.append(map_row)
+
+        # Show the result lines per lines
+        for rows in map_table:
+            print(rows)
+
+        '''
+        # Open a file dialog box and allow the user to select a file
+        file = filedialog.asksaveasfilename(initialdir="data/", title="Select a file", filetypes=(("Map data files", "*.mapdata"), ("All files", "*.*")))
+
+        # If the user selected a file
+        if file:
+        '''
+
 
     # Method: show
     # Purpose: Show the window
