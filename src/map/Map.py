@@ -51,17 +51,14 @@ class Map:
     # Method: convert_to_str
     # Purpose: Convert the map table to a string
     def convert_to_str(self, map_table: list):
-        # Variable(s)
-        map_str = ""
+        # Convert the integers to characters
+        map_table = [[str(character) for character in line] for line in map_table]
 
-        # Loop through the map table
-        for row in range(len(map_table)):
-            for column in range(len(map_table[row])):
-                # Add the number to the map string
-                map_str += str(map_table[row][column])
+        # Join the characters in each line
+        map_table = [''.join(line) for line in map_table]
 
-            # Add a new line to the map string
-            map_str += "\n"
+        # Join the lines with a newline character
+        return '\n'.join(map_table)
 
     # Method: get_map_table
     # Purpose: Return the map table

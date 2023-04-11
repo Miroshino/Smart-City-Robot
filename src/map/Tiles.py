@@ -70,6 +70,25 @@ class Tiles:
 
                 self.buttons[row * self.columns + column].configure(bg=self.map.get_number_color(map_table[row][column]))
 
+    # Method: generate_empty_tiles
+    # Purpose: Generate empty tiles in the map editor with only the black border
+    def generate_empty_tiles(self):
+        # Create a button grid
+        for row in range(self.get_rows()):
+            for column in range(self.columns):
+                # Create a button
+                button = tk.Button(self.upper_frame, text="", bg="white", width=2, height=1,
+                                   command=lambda button_id=(row, column): self.button_handler(button_id))
+                button.grid(row=row, column=column)
+                self.buttons.append(button)
+
+        # Change the color of the buttons according to the map table numbers
+        for row in range(self.get_rows()):
+            for column in range(self.columns):
+                # Border limit of the grid in red
+                if row == 0 or row == self.rows - 1 or column == 0 or column == self.columns - 1:
+                    self.buttons[row * self.columns + column].configure(bg="black")
+
     # Method: change_tiles_color
     # Purpose: Change the color of the tiles by using the map table
     def change_tiles_color(self, map_table : list):
