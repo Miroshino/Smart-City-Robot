@@ -1,5 +1,6 @@
 # Import(s)
 import tkinter as tk
+import random as random
 from tkinter import messagebox, filedialog
 
 import map.Tiles as Tiles
@@ -22,11 +23,11 @@ class GameFrame:
 
         # Center the window
         self.window.update_idletasks()
-        width = self.window.winfo_width() # Get the window's width and height
-        height = self.window.winfo_height() # Get the window's width and height
-        x = (self.window.winfo_screenwidth() // 2) - (width // 2) - 50 # Center the window on the screen
-        y = (self.window.winfo_screenheight() // 2) - (height // 2) - 50 # Center the window on the screen
-        self.window.geometry('{}x{}+{}+{}'.format(width, height, x, y)) # Set the window's position
+        width = self.window.winfo_width()  # Get the window's width and height
+        height = self.window.winfo_height()  # Get the window's width and height
+        x = (self.window.winfo_screenwidth() // 2) - (width // 2) - 50  # Center the window on the screen
+        y = (self.window.winfo_screenheight() // 2) - (height // 2) - 50  # Center the window on the screen
+        self.window.geometry('{}x{}+{}+{}'.format(width, height, x, y))  # Set the window's position
 
         # Create bottom & upper frame variables
         self.bottom_frame = tk.Frame(self.window, bg="black")
@@ -78,8 +79,13 @@ class GameFrame:
         # Create a black frame at the top of the window
         self.upper_frame.pack(side="top", fill="x")
 
+        # Get all .mapdata files in the data folder
+        maps = Map.Map().get_all_map_files()
+        random_map = str(random.randint(0, len(maps) - 1))
+
         # Generate tiles
-        self.tiles.generate_tiles()
+        # The selected map will be randomly generated with the maps variable
+        self.tiles.generate_tiles("data/" + maps[int(random_map)])
 
     # Method: start_button_handler
     # Purpose: Start the generation of the map and the simulation

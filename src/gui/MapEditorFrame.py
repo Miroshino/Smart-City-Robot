@@ -145,7 +145,7 @@ class MapEditorFrame:
 
         # Center the window
         color_window.update_idletasks()
-        width = color_window.winfo_width()
+        color_window.winfo_width()
 
         # Show color list based on the colors table
         for color in self.colors_table:

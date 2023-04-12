@@ -1,4 +1,5 @@
 # Import(s)
+import os
 
 
 # Map Class
@@ -64,3 +65,15 @@ class Map:
     # Purpose: Return the map table
     def get_map_table(self):
         return self.map_table
+
+    # Method: get_map_files
+    # Purpose: Return every .mapdata file in the map folder
+    def get_all_map_files(self):
+        # Get the map folder path
+        map_folder_path = os.path.join(os.path.dirname("src"), "data")
+
+        # Get every .mapdata file in the map folder
+        map_files = [file for file in os.listdir(map_folder_path) if file.endswith(".mapdata")]
+
+        # Return the map files
+        return map_files

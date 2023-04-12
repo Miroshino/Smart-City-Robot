@@ -1,7 +1,7 @@
 # Import(s)
 import tkinter as tk
+
 import gui.GameFrame as GameFrame
-import gui.MapEditorFrame as MapEditorFrame
 import map.Map as Map
 
 
@@ -48,7 +48,7 @@ class Tiles:
     # Method(s)
     # Method: generate_tiles
     # Purpose: Generate tiles in the upper menu
-    def generate_tiles(self):
+    def generate_tiles(self, map_path: str):
         # Create a button grid
         for row in range(self.get_rows()):
             for column in range(self.columns):
@@ -59,7 +59,7 @@ class Tiles:
                 self.buttons.append(button)
 
         # Get the map table
-        self.map.convert_to_table('data/1.mapdata')
+        self.map.convert_to_table(map_path)
         map_table = self.map.get_map_table()
 
         # Change the color of the buttons according to the map table numbers
@@ -69,7 +69,8 @@ class Tiles:
                 if row == 0 or row == self.rows - 1 or column == 0 or column == self.columns - 1:
                     self.buttons[row * self.columns + column].configure(bg="black")
 
-                self.buttons[row * self.columns + column].configure(bg=self.map.get_number_color(map_table[row][column]))
+                self.buttons[row * self.columns + column].configure(
+                    bg=self.map.get_number_color(map_table[row][column]))
 
     # Method: generate_empty_tiles
     # Purpose: Generate empty tiles in the map editor with only the black border
@@ -92,10 +93,11 @@ class Tiles:
 
     # Method: change_tiles_color
     # Purpose: Change the color of the tiles by using the map table
-    def change_tiles_color(self, map_table : list):
+    def change_tiles_color(self, map_table: list):
         for row in range(self.get_rows()):
             for column in range(self.columns):
-                self.buttons[row * self.columns + column].configure(bg=self.map.get_number_color(map_table[row][column]))
+                self.buttons[row * self.columns + column].configure(
+                    bg=self.map.get_number_color(map_table[row][column]))
 
     # Method: reset_tiles
     # Purpose: Reset the tiles to their default state
