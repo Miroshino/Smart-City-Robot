@@ -15,6 +15,7 @@ class Tiles:
         self.rows = 20
         self.buttons = []
         self.current_color = "white"
+        self.current_map = None
 
         # Create map object
         self.map = Map.Map()
@@ -45,10 +46,18 @@ class Tiles:
     def get_columns(self):
         return self.columns
 
+    # Method: get_window
+    # Purpose: Return the window
+    def get_window(self):
+        return self.window
+
     # Method(s)
     # Method: generate_tiles
     # Purpose: Generate tiles in the upper menu
     def generate_tiles(self, map_path: str):
+        # Map path is not empty
+        self.current_map = map_path
+
         # Create a button grid
         for row in range(self.get_rows()):
             for column in range(self.columns):
@@ -104,7 +113,8 @@ class Tiles:
     def reset_tiles(self):
         for button in self.buttons:
             if button.cget("bg") != "black":
-                button.configure(bg="white")
+
+                button.configure(text="")
 
     # Method: get_map
     # Purpose: Return the map object

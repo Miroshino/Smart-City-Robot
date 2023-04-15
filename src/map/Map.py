@@ -23,7 +23,7 @@ class Map:
             0: "black",  # Border
             1: "white",  # Empty (road)
             2: "grey",  # Building
-            3: "blue",  # Lake
+            3: "Teal",  # Lake
             4: "green",  # Park
         }
 

@@ -21,14 +21,14 @@ class MapEditorFrame:
             "black": 0,  # Border
             "white": 1,  # Empty (road)
             "grey": 2,  # Building
-            "blue": 3,  # Water
+            "Teal": 3,  # Water
             "green": 4,  # Grass
         }
         self.colors_label_table = {
             "black": "Bordure",  # Border
             "white": "Route",  # Empty (road)
             "grey": "Bâtiment",  # Building
-            "blue": "Eau",  # Water
+            "Teal": "Eau",  # Water
             "green": "Herbe",  # Grass
         }
 

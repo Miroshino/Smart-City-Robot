@@ -4,6 +4,7 @@ import random as random
 from tkinter import messagebox, filedialog
 
 import map.Tiles as Tiles
+import map.Session as Session
 from map import Map
 
 
@@ -37,6 +38,9 @@ class GameFrame:
         self.tiles = Tiles.Tiles(self)
         self.tiles.set_current_color(1)
         self.tiles.set_current_frame("game")
+
+        # Create session object
+        self.session = Session.Session(self)
 
     # Method: get_tiles
     # Purpose: Return the tiles object
@@ -90,7 +94,8 @@ class GameFrame:
     # Method: start_button_handler
     # Purpose: Start the generation of the map and the simulation
     def start_button_handler(self):
-        pass
+        self.session.generate_points(4)
+        self.session.generate_agents(8)
 
     # Method: stop_button_handler
     # Purpose: Stop the generation of the map and the simulation
