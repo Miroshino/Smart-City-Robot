@@ -130,7 +130,7 @@ class GameFrame:
             # For each agent, move to the next position
             for team in self.session.get_current_agents():
                 for agent in self.session.get_team_current_agents(team):
-                    agent.move(self.tiles)
+                    agent.move(self.tiles, self.session)
         else:
             messagebox.showerror("Démarrage impossible",
                                  "Veuillez d'abord générer les différents points de la carte.")

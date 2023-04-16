@@ -47,6 +47,7 @@ class AStar:
             points = self.get_session().get_storage_points()
         elif mission == "charging":
             points = self.get_session().get_charge_stations_points()
+            self.agent.set_battery(100)
         elif mission == "delivery":
             points = self.get_session().get_delivery_points()
         else:
