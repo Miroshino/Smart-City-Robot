@@ -5,6 +5,7 @@ import game.Agent as Agent
 import game.Point as Point
 import game.ChargeStation as ChargeStation
 import gui.GameFrame as GameFrame
+from algorithm import AStar
 
 
 # Session Class
@@ -22,6 +23,8 @@ class Session:
         self.started = False
         self.spawn_amount = 0
         self.buttons = game_frame.get_tiles().get_buttons()
+        self.rows = game_frame.get_tiles().get_rows()
+        self.columns = game_frame.get_tiles().get_columns()
         self.distance = 5
 
     # Getters
@@ -176,7 +179,7 @@ class Session:
 
                 # Add the agent
                 agent = Agent.Agent(default_battery, 0, "storage",
-                                    (button.grid_info()["row"], button.grid_info()["column"]))
+                                    (button.grid_info()["row"], button.grid_info()["column"]), color)
                 self.add_agent(color, agent)
                 button.configure(bg=color, text=agent.get_battery(), fg="white")
 

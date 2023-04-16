@@ -5,6 +5,7 @@ from tkinter import messagebox, filedialog
 
 import map.Tiles as Tiles
 import map.Session as Session
+import algorithm.AStar as AStar
 from map import Map
 
 
@@ -94,8 +95,16 @@ class GameFrame:
     # Method: start_button_handler
     # Purpose: Start the generation of the map and the simulation
     def start_button_handler(self):
-        self.session.generate_points(4)
-        self.session.generate_agents(8)
+        # Generate points and agents
+        self.session.generate_points(1)
+        self.session.generate_agents(2)
+
+        # AStar algorithm
+        # For each agent, find the path to the closest storage point
+        for team in self.session.get_current_agents():
+            for agent in self.session.get_team_current_agents(team):
+                a_star = AStar.AStar(self.tiles, agent.get_position(), (15, 15))
+                path = a_star.find_path()
 
     # Method: stop_button_handler
     # Purpose: Stop the generation of the map and the simulation
