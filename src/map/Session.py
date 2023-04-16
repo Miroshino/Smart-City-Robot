@@ -4,6 +4,7 @@ import random
 import game.Agent as Agent
 import game.ChargeStation as ChargeStation
 import game.Point as Point
+import game.Team as Team
 import gui.GameFrame as GameFrame
 
 
@@ -12,6 +13,7 @@ class Session:
     # Constructor method
     def __init__(self, game_frame: GameFrame):
         # Game frame
+        self.game_frame = game_frame
         self.window = game_frame.window
 
         # Variable(s)
@@ -26,6 +28,8 @@ class Session:
         self.rows = game_frame.get_tiles().get_rows()
         self.columns = game_frame.get_tiles().get_columns()
         self.distance = 5
+        self.blue_team = None
+        self.red_team = None
 
     # Getters
     def get_delivery_points(self):
@@ -47,6 +51,9 @@ class Session:
         return self.current_agents[team]
 
     def get_game_frame(self):
+        return self.game_frame
+
+    def get_window_game_frame(self):
         return self.window
 
     # Method(s)
@@ -186,6 +193,10 @@ class Session:
                                     (button.grid_info()["row"], button.grid_info()["column"]), 2, color)
                 self.add_agent(color, agent)
                 button.configure(bg=color, text=agent.get_battery(), fg="white")
+
+                # Configure team
+                self.blue_team = Team.Team("blue", 0, self.get_team_current_agents("blue"))
+                self.red_team = Team.Team("red", 0, self.get_team_current_agents("red"))
 
                 num_agents += 1
                 i += 1

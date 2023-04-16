@@ -1,4 +1,5 @@
 # Import(s)
+from tkinter import messagebox
 
 import algorithm.AStar as AStar
 import map.Session as Session
@@ -176,6 +177,32 @@ class Agent:
                     text=self.get_battery(),
                     fg="white"
                 )
+
+                # If delivery, then add points based on the agent team (red or blue)
+                if self.get_mission() == "storage":
+                    # Check if the team red or blue won (50 pts)
+                    if session.red_team.get_points() == 30:
+                        messagebox.showinfo("Partie terminée", "L'équipe rouge a gagné la partie !")
+                        session.get_game_frame().destroy()
+                    elif session.blue_team.get_points() == 30:
+                        messagebox.showinfo("Partie terminée", "L'équipe bleue a gagné la partie !")
+                        session.get_game_frame().destroy()
+
+                    # Check if the agent is red or blue
+                    if self.get_color() == "red":
+                        # Variable(s)
+                        buttons = session.get_game_frame().buttons_bottom_frame
+
+                        # Add points
+                        session.red_team.add_points(1)
+                        buttons[3].configure(text="Rouges: " + str(session.blue_team.get_points()) + " points")
+                    else:
+                        # Variable(s)
+                        buttons = session.get_game_frame().buttons_bottom_frame
+
+                        # Add points
+                        session.blue_team.add_points(1)
+                        buttons[2].configure(text="Bleus: " + str(session.blue_team.get_points()) + " points")
 
                 # Change is_moving to False
                 self.set_is_moving(False)
