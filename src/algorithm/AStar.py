@@ -33,19 +33,28 @@ class AStar:
         came_from = {}
         g_score = {self.start_position: 0}  # Distance from start_position to current_pos
         f_score = {self.start_position: self.heuristic(self.start_position, self.end_position)}  # Distance from start_position to end_position
+        allowed_colors = ["white", "green"]
 
         # While open_set isn't empty
         while not open_set.empty():
             # Change current_pos
             current_pos = open_set.get()[1]  # Get the position of the button
 
-            # Check if current_pos == end_position (if it's finished)
-            if current_pos == self.end_position:
-                return self.reconstruct_path(came_from, self.end_position)[::-1] # Reverse the path
+            # Check if current_pos is 1 tile away from the end_position
+            if abs(current_pos[0] - self.end_position[0]) + abs(current_pos[1] - self.end_position[1]) == 1:
+                return self.reconstruct_path(came_from, current_pos)[::-1]
 
             for neighbor_position in self.get_neighbors(current_pos):
+                neighbor_color = self.tiles.get_button(neighbor_position[0], neighbor_position[1]).cget("bg")  # Get the neighbor color
+
+                # Check if the neighbor color is allowed
+                if neighbor_color not in allowed_colors:
+                    continue
+
+                # Calculate tentative_g_score
                 tentative_g_score = g_score[current_pos] + 1  # Calculate tentative_g_score
 
+                # Check if tentative_g_score is better than g_score
                 if neighbor_position not in g_score or tentative_g_score < g_score[neighbor_position]:
                     came_from[neighbor_position] = current_pos  # Change came_from
                     g_score[neighbor_position] = tentative_g_score  # Calculate g_score

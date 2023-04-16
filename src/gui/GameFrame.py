@@ -1,4 +1,5 @@
 # Import(s)
+import time
 import tkinter as tk
 import random as random
 from tkinter import messagebox, filedialog
@@ -16,6 +17,9 @@ class GameFrame:
         # Attributes
         self.title = title
         self.size = size
+
+        # Variable(s)
+        self.agents_generated = 0
 
         # Create main window
         self.window = tk.Tk()
@@ -66,8 +70,8 @@ class GameFrame:
 
         # Define a list of tuples with button information
         buttons = [
-            ("Démarrer", self.start_button_handler),
-            ("Arrêter", self.stop_button_handler),
+            ("Générer", self.generate_button_handler),
+            ("Démarrer", self.simulate_button_handler),
             ("Recommencer", self.restart_button_handler),
             ("Ouvrir", self.open_file_handler),
             ("Retour", self.window.destroy),
@@ -92,9 +96,12 @@ class GameFrame:
         # The selected map will be randomly generated with the maps variable
         self.tiles.generate_tiles("data/" + maps[int(random_map)])
 
-    # Method: start_button_handler
-    # Purpose: Start the generation of the map and the simulation
-    def start_button_handler(self):
+    # Method: generate_button_handler
+    # Purpose: Start the generation of the map
+    def generate_button_handler(self):
+        # Variable(s)
+        agents_finished = 0
+
         # Generate points and agents
         self.session.generate_points(1)
         self.session.generate_agents(2)
@@ -103,13 +110,28 @@ class GameFrame:
         # For each agent, find the path to the closest storage point
         for team in self.session.get_current_agents():
             for agent in self.session.get_team_current_agents(team):
-                a_star = AStar.AStar(self.tiles, agent.get_position(), (15, 15))
+                # AStar algorithm
+                a_star = AStar.AStar(self.tiles, agent.get_position(), (random.randint(2, 18), random.randint(2, 18)))
                 path = a_star.find_path()
+                agent.set_move_positions(path)
 
-    # Method: stop_button_handler
-    # Purpose: Stop the generation of the map and the simulation
-    def stop_button_handler(self):
-        pass
+                # Increment the number of agents that have finished their path
+                self.agents_generated += 1
+
+    # Method: simulate_button_handler
+    # Purpose: Simulate the movement of the agents
+    def simulate_button_handler(self):
+        # Check if every agent(s) are ready to move
+        if self.agents_generated == len(self.session.get_current_agents()):
+            print("Simulation started... Agents are ready to move.")
+
+            # For each agent, move to the next position
+            for team in self.session.get_current_agents():
+                for agent in self.session.get_team_current_agents(team):
+                    agent.move(self.tiles)
+        else:
+            messagebox.showerror("Démarrage impossible",
+                                 "Veuillez d'abord générer les différents points de la carte.")
 
     # Method: restart_button_handler
     # Purpose: Change all buttons to white except the border limit

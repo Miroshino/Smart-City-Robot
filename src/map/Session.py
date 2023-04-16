@@ -179,7 +179,7 @@ class Session:
 
                 # Add the agent
                 agent = Agent.Agent(default_battery, 0, "storage",
-                                    (button.grid_info()["row"], button.grid_info()["column"]), color)
+                                    (button.grid_info()["row"], button.grid_info()["column"]), 2, color)
                 self.add_agent(color, agent)
                 button.configure(bg=color, text=agent.get_battery(), fg="white")
 
