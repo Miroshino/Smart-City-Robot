@@ -183,10 +183,15 @@ class Agent:
                     # Check if the team red or blue won (50 pts)
                     if session.red_team.get_points() == 30:
                         messagebox.showinfo("Partie terminée", "L'équipe rouge a gagné la partie !")
-                        session.get_game_frame().destroy()
+
+                        # Then stop the game
+                        session.get_game_frame().stop_game()
+
                     elif session.blue_team.get_points() == 30:
                         messagebox.showinfo("Partie terminée", "L'équipe bleue a gagné la partie !")
-                        session.get_game_frame().destroy()
+
+                        # Then stop the game
+                        session.get_game_frame().stop_game()
 
                     # Check if the agent is red or blue
                     if self.get_color() == "red":

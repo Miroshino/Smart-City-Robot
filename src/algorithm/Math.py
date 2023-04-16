@@ -1,7 +1,3 @@
-# Import(s)
-import math
-
-
 # Math Class
 class Math:
     # Method(s)

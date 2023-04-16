@@ -1,13 +1,12 @@
 # Import(s)
-import time
-import tkinter as tk
 import random as random
-from tkinter import messagebox, filedialog
+import tkinter as tk
+from tkinter import messagebox
 
-import map.Tiles as Tiles
-import map.Session as Session
 import algorithm.AStar as AStar
-import algorithm.Math as Math
+import gui.MainFrame as MainFrame
+import map.Session as Session
+import map.Tiles as Tiles
 from map import Map
 
 
@@ -76,7 +75,7 @@ class GameFrame:
             ("Démarrer", self.simulate_button_handler),
             ("Bleus: 0 points", self.no_func),
             ("Rouges: 0 points", self.no_func),
-            ("Retour", self.window.destroy),
+            ("Retour", self.back_button_handler),
         ]
 
         # Add buttons to the frame using a for loop and automatically horizontal center them
@@ -109,8 +108,8 @@ class GameFrame:
     # Method: generate_button_handler
     # Purpose: Start the generation of the map
     def generate_button_handler(self):
-        # Variable(s)
-        agents_finished = 0
+        # Disable the generate button
+        self.buttons_bottom_frame[0].config(state="disabled")
 
         # Generate points and agents
         self.session.generate_points(2)
@@ -132,6 +131,9 @@ class GameFrame:
     # Method: simulate_button_handler
     # Purpose: Simulate the movement of the agents
     def simulate_button_handler(self):
+        # Disable the generate button
+        self.buttons_bottom_frame[1].config(state="disabled")
+
         # Check if every agent(s) are ready to move
         if 0 < self.agents_generated <= len(self.session.get_agents()):
             print("Simulation started... Agents are ready to move.")
@@ -148,6 +150,18 @@ class GameFrame:
     # Purpose: Do nothing
     def no_func(self):
         pass
+
+    # Method: back_button_handler
+    # Purpose: Go back to the main menu
+    def back_button_handler(self):
+        self.stop_game()
+
+    # Method: stop_game
+    # Purpose: Stop the game (delete the window and go back to the main menu)
+    def stop_game(self):
+        self.window.destroy()
+        main_frame: MainFrame = MainFrame.MainFrame("Smart City Rumble - Menu Principal", "400x100")
+        main_frame.show()
 
     # Method: show
     # Purpose: Show the window

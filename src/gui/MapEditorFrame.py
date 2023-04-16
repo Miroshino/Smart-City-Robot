@@ -3,6 +3,7 @@ import tkinter as tk
 import tkinter.filedialog as filedialog
 from tkinter import messagebox
 
+import gui.MainFrame as MainFrame
 import map.Tiles as Tiles
 import map.Map as Map
 
@@ -87,7 +88,7 @@ class MapEditorFrame:
             ("Changer de couleur", self.change_color_handler),
             ("Sauvegarder", self.save_file_handler),
             ("Réinitialiser", self.reset_handler),
-            ("Retour", self.window.destroy),
+            ("Retour", self.back_handler)
         ]
 
         # Add buttons to the frame using a for loop and automatically horizontal center them
@@ -124,9 +125,9 @@ class MapEditorFrame:
                     file_path = file.name  # Get the file path
 
                     # Create a map object
-                    map = Map.Map()
-                    map.convert_to_table(file_path)
-                    map_table = map.get_map_table()
+                    grid = Map.Map()
+                    grid.convert_to_table(file_path)
+                    map_table = grid.get_map_table()
 
                     # Change the color of the tiles
                     self.tiles.change_tiles_color(map_table)
@@ -151,11 +152,11 @@ class MapEditorFrame:
         for color in self.colors_table:
             if color == "white":
                 button = tk.Button(color_window, text=self.colors_label_table[color], bg=color, width=41, height=3,
-                                   command=lambda color=color: self.tiles.set_current_color(self.colors_table[color]))
+                                   command=lambda colour=color: self.tiles.set_current_color(self.colors_table[colour]))
             else:
                 button = tk.Button(color_window, text=self.colors_label_table[color], foreground="white", bg=color,
                                    width=41, height=3,
-                                   command=lambda color=color: self.tiles.set_current_color(self.colors_table[color]))
+                                   command=lambda colour=color: self.tiles.set_current_color(self.colors_table[colour]))
 
             button.pack(pady=2)
 
@@ -170,7 +171,7 @@ class MapEditorFrame:
         if file:
             # Create map table based on the current tiles
             map_table = []
-            map = self.tiles.get_map()
+            grid = self.tiles.get_map()
 
             # Get the current color of each tile and add it to the map table
             for rows in range(self.tiles.get_rows()):
@@ -182,7 +183,7 @@ class MapEditorFrame:
                 map_table.append(map_row)
 
             # Save the file to the selected path with the good format
-            table_str = map.convert_to_str(map_table)
+            table_str = grid.convert_to_str(map_table)
             with open(file + ".mapdata", 'w') as file:
                 file.write(table_str)
 
@@ -191,6 +192,13 @@ class MapEditorFrame:
     def reset_handler(self):
         # Reset the tiles
         self.tiles.reset_tiles()
+
+    # Method: back_handler
+    # Purpose: Close the window
+    def back_handler(self):
+        self.window.destroy()
+        main_frame: MainFrame = MainFrame.MainFrame("Smart City Rumble - Menu Principal", "400x100")
+        main_frame.show()
 
     # Method: show
     # Purpose: Show the window

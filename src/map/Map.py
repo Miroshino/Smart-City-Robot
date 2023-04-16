@@ -17,7 +17,8 @@ class Map:
 
     # Method: get_number_color
     # Purpose: Return the color of the number based on the number available in the map file
-    def get_number_color(self, number: int):
+    @staticmethod
+    def get_number_color(number: int):
         # Color table
         colors = {
             0: "black",  # Border
@@ -51,7 +52,8 @@ class Map:
 
     # Method: convert_to_str
     # Purpose: Convert the map table to a string
-    def convert_to_str(self, map_table: list):
+    @staticmethod
+    def convert_to_str(map_table: list):
         # Convert the integers to characters
         map_table = [[str(character) for character in line] for line in map_table]
 
@@ -68,7 +70,8 @@ class Map:
 
     # Method: get_map_files
     # Purpose: Return every .mapdata file in the map folder
-    def get_all_map_files(self):
+    @staticmethod
+    def get_all_map_files():
         # Get the map folder path
         map_folder_path = os.path.join(os.path.dirname("src"), "data")
 

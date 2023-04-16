@@ -113,8 +113,7 @@ class Tiles:
     def reset_tiles(self):
         for button in self.buttons:
             if button.cget("bg") != "black":
-
-                button.configure(text="")
+                button.configure(bg="white", text="")
 
     # Method: get_map
     # Purpose: Return the map object

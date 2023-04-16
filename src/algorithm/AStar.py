@@ -51,7 +51,7 @@ class AStar:
         elif mission == "delivery":
             points = self.get_session().get_delivery_points()
         else:
-            return (2, 2)  # Default position if mission is invalid
+            return 2, 2  # Default position if mission is invalid
 
         # Set the end position to the closest point
         distances = [int(Math.Math().get_distance(self.get_start_position(), p.get_position())) for p in points]
