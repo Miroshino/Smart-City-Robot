@@ -2,10 +2,9 @@
 import random
 
 import game.Agent as Agent
-import game.Point as Point
 import game.ChargeStation as ChargeStation
+import game.Point as Point
 import gui.GameFrame as GameFrame
-from algorithm import AStar
 
 
 # Session Class
@@ -20,6 +19,7 @@ class Session:
         self.storage_points = []
         self.charge_stations_points = []
         self.current_agents = {"blue": [], "red": []}
+        self.agents = []
         self.started = False
         self.spawn_amount = 0
         self.buttons = game_frame.get_tiles().get_buttons()
@@ -39,6 +39,9 @@ class Session:
 
     def get_current_agents(self):
         return self.current_agents
+
+    def get_agents(self):
+        return self.agents
 
     def get_team_current_agents(self, team: str):
         return self.current_agents[team]
@@ -69,6 +72,7 @@ class Session:
     # Purpose: Add an agent to the list
     def add_agent(self, team: str, agent: Agent):
         self.current_agents[team].append(agent)
+        self.agents.append(agent)
 
     # Method: generate_points
     # Purpose: Generate every points (delivery points, storage points)

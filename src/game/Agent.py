@@ -7,16 +7,19 @@ import map.Tiles as Tiles
 # Agent Class
 class Agent:
     # Constructor method
-    def __init__(self, battery: int = 10, points: int = 0, mission: str = "Delivery", position = (0, 0), speed: int = 1, color: str = "blue"):
+    def __init__(self, battery: int = 10, points: int = 0, mission: str = "storage", position = (0, 0), speed: int = 1, color: str = "blue"):
+        # Attribute(s)
         self.battery = battery
         self.points = points
         self.mission = mission
         self.position = position
         self.speed = speed
         self.color = color
+
+        # Variable(s)
         self.is_moving = False
         self.move_positions = []
-
+        self.original_colors = {}
         self.target_position = None
 
     # Getters
@@ -59,12 +62,20 @@ class Agent:
 
         # Define the function to move to the next position
         def move_to_next_position():
+            # Variable(s)
             nonlocal current_position
             nonlocal move_positions
 
+            # Check if the battery remaining is lower than the path length
+            if self.get_battery() < len(move_positions):
+                # Stop the movement
+                self.set_is_moving(False)
+                print("Agent: " + str(self.get_battery()) + " < " + str(len(move_positions)) + " = " + str(self.get_battery() < len(move_positions)))
+                return
+
             # Change the color of the previous button and hide the text
             tiles.get_button(current_position[0], current_position[1]).configure(
-                bg="white",
+                bg=self.original_colors[current_position],
                 text=""
             )
 
@@ -79,10 +90,11 @@ class Agent:
             for position in move_positions:
                 if position != current_position:
                     tiles.get_button(position[0], position[1]).configure(
-                        bg="white",
+                        bg=self.original_colors[position],
                         text=""
                     )
                 else:
+                    self.set_battery(self.get_battery() - 1)
                     tiles.get_button(position[0], position[1]).configure(
                         bg=self.get_color(),
                         text=self.get_battery(),
@@ -99,10 +111,17 @@ class Agent:
             else:
                 # Change the color of the last position and hide the text
                 if current_position != self.get_position():
-                    tiles.get_button(current_position[0], current_position[1]).configure(
-                        bg="white",
-                        text=""
-                    )
+                    # Check if the button was red or blue before
+                    if self.original_colors[self.get_position()] == "red" or self.original_colors[self.get_position()] == "blue":
+                        tiles.get_button(current_position[0], current_position[1]).configure(
+                            bg="white",
+                            text=""
+                        )
+                    else:
+                        tiles.get_button(current_position[0], current_position[1]).configure(
+                            bg=self.original_colors[current_position],
+                            text=""
+                        )
 
                 # Change the color of the final position and show the text
                 tiles.get_button(self.get_position()[0], self.get_position()[1]).configure(
@@ -113,6 +132,16 @@ class Agent:
 
                 # Change is_moving to False
                 self.set_is_moving(False)
+
+        # Save the original colors of all buttons
+        self.original_colors = {}
+        for row in range(tiles.get_rows()):
+            for column in range(tiles.get_columns()):
+                button = tiles.get_button(row, column)
+                if button.cget("bg") == "red" or button.cget("bg") == "blue":
+                    self.original_colors[(row, column)] = "white"
+                else:
+                    self.original_colors[(row, column)] = button.cget("bg")
 
         # Schedule the first move to occur after 1 second
         tiles.window.after(int(1000 / self.get_speed()), move_to_next_position)

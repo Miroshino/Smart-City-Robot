@@ -7,6 +7,7 @@ from tkinter import messagebox, filedialog
 import map.Tiles as Tiles
 import map.Session as Session
 import algorithm.AStar as AStar
+import algorithm.Math as Math
 from map import Map
 
 
@@ -103,15 +104,16 @@ class GameFrame:
         agents_finished = 0
 
         # Generate points and agents
-        self.session.generate_points(1)
-        self.session.generate_agents(2)
+        self.session.generate_points(2)
+        self.session.generate_agents(4)
 
         # AStar algorithm
         # For each agent, find the path to the closest storage point
         for team in self.session.get_current_agents():
             for agent in self.session.get_team_current_agents(team):
                 # AStar algorithm
-                a_star = AStar.AStar(self.tiles, agent.get_position(), (random.randint(2, 18), random.randint(2, 18)))
+                agent.set_mission("storage")
+                a_star = AStar.AStar(self.tiles, agent, self.session)
                 path = a_star.find_path()
                 agent.set_move_positions(path)
 
@@ -122,7 +124,7 @@ class GameFrame:
     # Purpose: Simulate the movement of the agents
     def simulate_button_handler(self):
         # Check if every agent(s) are ready to move
-        if self.agents_generated == len(self.session.get_current_agents()):
+        if 0 < self.agents_generated <= len(self.session.get_agents()):
             print("Simulation started... Agents are ready to move.")
 
             # For each agent, move to the next position
